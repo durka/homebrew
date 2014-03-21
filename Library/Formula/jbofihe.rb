@@ -24,13 +24,13 @@ index 1c51a29..397b37f 100644
 --- a/Makefile.in
 +++ b/Makefile.in
 @@ -220,7 +220,7 @@ install : jbofihe smujajgau cmafihe jvocuhadju $(DICTNAME)
-    [ -d $(EXEDIR) ] || mkdir -p $(EXEDIR)
-    [ -d $(LIBDIR) ] || mkdir -p $(LIBDIR)
-    [ -d $(MANDIR) ] || mkdir -p $(MANDIR)
--   for e in jbofihe cmafihe smujajgau jvocuhadju vlatai ; do cp $$e $(EXEDIR) ; chmod 755 $(EXEDIR)/$$e ; strip -s $(EXEDIR)/$$e ; done
-+   for e in jbofihe cmafihe smujajgau jvocuhadju vlatai ; do cp $$e $(EXEDIR) ; chmod 755 $(EXEDIR)/$$e ; done
-    if [ -r $(DICTNAME) ]; then for d in $(DICTNAME) ; do cp $$d $(LIBDIR) ; chmod 644 $(LIBDIR)/$$d ; done ; fi
-    for m in jbofihe.1 cmafihe.1 smujajgau.1 jvocuhadju.1 vlatai.1 ; do cp $$m $(MANDIR) ; chmod 755 $(MANDIR)/$$m ; done
+ 	[ -d $(EXEDIR) ] || mkdir -p $(EXEDIR)
+ 	[ -d $(LIBDIR) ] || mkdir -p $(LIBDIR)
+ 	[ -d $(MANDIR) ] || mkdir -p $(MANDIR)
+-	for e in jbofihe cmafihe smujajgau jvocuhadju vlatai ; do cp $$e $(EXEDIR) ; chmod 755 $(EXEDIR)/$$e ; strip -s $(EXEDIR)/$$e ; done
++	for e in jbofihe cmafihe smujajgau jvocuhadju vlatai ; do cp $$e $(EXEDIR) ; chmod 755 $(EXEDIR)/$$e ; done
+ 	if [ -r $(DICTNAME) ]; then for d in $(DICTNAME) ; do cp $$d $(LIBDIR) ; chmod 644 $(LIBDIR)/$$d ; done ; fi
+ 	for m in jbofihe.1 cmafihe.1 smujajgau.1 jvocuhadju.1 vlatai.1 ; do cp $$m $(MANDIR) ; chmod 755 $(MANDIR)/$$m ; done
  
 diff --git a/dfasyn/compdfa.c b/dfasyn/compdfa.c
 index 2b9c1fd..c13290c 100644
@@ -45,4 +45,5 @@ index 2b9c1fd..c13290c 100644
  
    local_dfas = dfas;
    Nt = ntokens;
+
 
