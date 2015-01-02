@@ -7,18 +7,18 @@ class Googlecl < Formula
 
   depends_on :python if MacOS.version <= :snow_leopard
 
-  conflicts_with 'osxutils', :because => 'both install a google binary'
-
   def install
     ENV["PYTHONPATH"] = lib+"python2.7/site-packages"
     system "python", "setup.py", "install",
       "--prefix=#{prefix}", "--single-version-externally-managed",
       "--record=installed.txt"
 
+    mv bin/"google", bin/"googlecl"
+
     bin.env_script_all_files(libexec+'bin', :PYTHONPATH => ENV['PYTHONPATH'])
   end
 
   test do
-    system "#{bin}/google", '--version'
+    system "#{bin}/googlecl", '--version'
   end
 end
