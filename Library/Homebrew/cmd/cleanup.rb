@@ -41,7 +41,7 @@ module Homebrew
         opoo "Skipping reserved: #{rack} (pass -f to force)"
       else
         begin
-          cleanup_formula Formula.from_rack(rack)
+          cleanup_formula Formulary.from_rack(rack)
         rescue FormulaUnavailableError, TapFormulaAmbiguityError
           # Don't complain about directories from DIY installs
         end
