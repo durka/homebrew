@@ -17,7 +17,13 @@ module Homebrew
         rm_DS_Store
       end
     else
-      ARGV.resolved_formulae.each { |f| cleanup_formula(f) }
+      ARGV.resolved_formulae.each do |f|
+        if reserved? f and not ARGV.force?
+          opoo "Skipping reserved: #{f} (pass -f to force)"
+        else
+          cleanup_formula(f)
+        end
+      end
     end
   end
 
@@ -31,10 +37,14 @@ module Homebrew
 
   def cleanup_cellar
     HOMEBREW_CELLAR.subdirs.each do |rack|
-      begin
-        cleanup_formula Formulary.from_rack(rack)
-      rescue FormulaUnavailableError, TapFormulaAmbiguityError
-        # Don't complain about directories from DIY installs
+      if reserved? rack and not ARGV.force?
+        opoo "Skipping reserved: #{rack} (pass -f to force)"
+      else
+        begin
+          cleanup_formula Formula.from_rack(rack)
+        rescue FormulaUnavailableError, TapFormulaAmbiguityError
+          # Don't complain about directories from DIY installs
+        end
       end
     end
   end
@@ -90,7 +100,9 @@ module Homebrew
                       end
 
       if file_is_stale || ARGV.switch?('s') && !f.installed? || bottle_file_outdated?(f, file)
-        cleanup_path(file) { file.unlink }
+        unless reserved? Pathname.new(HOMEBREW_CELLAR/f.name)
+          cleanup_path(file) { file.unlink }
+        end
       end
     end
   end
@@ -118,6 +130,10 @@ module Homebrew
       map { |p| HOMEBREW_PREFIX/p }.select(&:exist?)
     args = paths.map(&:to_s) + %w[-name .DS_Store -delete]
     quiet_system "find", *args
+  end
+
+  def reserved? rack
+    Pathname.new(rack/'.reserved').exist?
   end
 
   def eligible_for_cleanup?(formula)
