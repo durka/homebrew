@@ -16,6 +16,8 @@ module Homebrew
 
     if ARGV.include? '--pinned' or ARGV.include? '--versions'
       filtered_list
+    elsif ARGV.include? '--reserved'
+      list_reserved
     elsif ARGV.named.empty?
       if ARGV.include? "--full-name"
         full_names = Formula.installed.map(&:full_name).sort do |a, b|
@@ -99,6 +101,22 @@ module Homebrew
         versions = d.subdirs.map { |pn| pn.basename.to_s }
         next if ARGV.include?('--multiple') && versions.count < 2
         puts "#{d.basename} #{versions*' '}"
+      end
+    end
+  end
+
+  def list_reserved
+    if ARGV.named.empty?
+      HOMEBREW_CELLAR.subdirs.each do |rack|
+        if Pathname.new(rack/'.reserved').exist?
+          puts rack.basename
+        end
+      end
+    else
+      ARGV.named.each do |f|
+        if Pathname.new(HOMEBREW_CELLAR/f/'.reserved').exist?
+          puts f
+        end
       end
     end
   end
